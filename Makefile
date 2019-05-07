@@ -22,4 +22,4 @@ cobjs:
 goapp: clib
 	@echo BUILD GO APPLICATION
 	@mkdir -p $(OUTDIR)
-	@go build . -o $(OUTDIR)/gowithc
+	@go build -o $(OUTDIR)/gowithc .
