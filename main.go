@@ -11,6 +11,7 @@ import (
 	"errors"
 	"fmt"
 	"time"
+	"unsafe"
 )
 
 func main() {
@@ -37,6 +38,10 @@ func main() {
 		fmt.Println("Thread stopped successully")
 	}
 
+	fmt.Println("\n* Memory allocation test")
+	data := getDataBuffer(15)
+	fmt.Println("Data from C layer:", data)
+
 	time.Sleep(time.Second)
 	fmt.Println("\n* Go code end")
 }
@@ -59,4 +64,15 @@ func stopBackgroundThread() error {
 		return errors.New("capi_stop_thread() failure")
 	}
 	return nil
+}
+
+func getDataBuffer(count int) []byte {
+	cres := unsafe.Pointer(C.capi_get_buffer(C.uint(count)))
+	result := C.GoBytes(cres, C.int(count))
+	deleteDataBuffer(cres)
+	return result
+}
+
+func deleteDataBuffer(ptr unsafe.Pointer) {
+	C.capi_release_buffer(ptr)
 }
