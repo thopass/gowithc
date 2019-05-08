@@ -5,9 +5,15 @@
 
 #include "capi.h"
 
+#ifdef DEBUG
+#define LOG_FUN() printf("{ %s() }\n", __FUNCTION__)
+#else
+#define LOG_FUN()
+#endif
+
 double capi_add(double arg1, double arg2)
 {
-    printf("{ %s() }\n", __FUNCTION__);
+    LOG_FUN();
     return (arg1 + arg2);
 }
 
@@ -16,7 +22,7 @@ static bool _active_flag = false;
 
 static void* _thread_core(void* arg)
 {
-    printf("{ %s() }\n", __FUNCTION__);
+    LOG_FUN();
     printf(" - Thread started! -\n");
     while (_active_flag)
     {
@@ -28,7 +34,7 @@ static void* _thread_core(void* arg)
 
 bool capi_start_thread()
 {
-    printf("{ %s() }\n", __FUNCTION__);
+    LOG_FUN();
     if (_bg_thread != 0 && _active_flag == true)
     {
         return true;
@@ -48,7 +54,7 @@ bool capi_start_thread()
 
 bool capi_stop_thread()
 {
-    printf("{ %s() }\n", __FUNCTION__);
+    LOG_FUN();
     if (!_active_flag || _bg_thread != 0)
     {
         return true;
@@ -61,7 +67,7 @@ bool capi_stop_thread()
 
 uint8_t* capi_get_buffer(unsigned int size)
 {
-    printf("{ %s() }\n", __FUNCTION__);
+    LOG_FUN();
     if (size == 0)
     {
         return NULL;
@@ -80,6 +86,6 @@ uint8_t* capi_get_buffer(unsigned int size)
 
 void capi_release_buffer(void* ptr)
 {
-    printf("{ %s() }\n", __FUNCTION__);
+    LOG_FUN();
     free(ptr);
 }

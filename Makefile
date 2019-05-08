@@ -14,12 +14,15 @@ clib: cobjs
 	@mkdir -p $(LIBDIR)
 	@ar rcs $(LIBDIR)/capi.a $(BUILDDIR)/capi.o
 
-cobjs:
+cobjs: clean
 	@echo  COMPILE C OBJECTS
 	@mkdir -p ./build
 	@gcc -c $(CFLAGS) src/capi.c -o $(BUILDDIR)/capi.o
 
-goapp: clib
+goapp: cobjs clib
 	@echo BUILD GO APPLICATION
 	@mkdir -p $(OUTDIR)
 	@go build -o $(OUTDIR)/gowithc .
+
+debug: CFLAGS += -g -DDEBUG
+debug: goapp
